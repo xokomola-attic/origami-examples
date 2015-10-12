@@ -1,0 +1,56 @@
+<s:grammar xmlns:s="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <s:start>
+        <s:element name="json">
+            <s:interleave>
+                <s:attribute name="type">
+                    <s:value>object</s:value>
+                </s:attribute>
+                <s:element name="address">
+                    <s:interleave>
+                        <s:attribute name="type">
+                            <s:value>object</s:value>
+                        </s:attribute>
+                        <s:element name="city">
+                            <s:interleave>
+                                <s:attribute name="type">
+                                    <s:value>number</s:value>
+                                </s:attribute>
+                                <s:data type="integer"/>
+                            </s:interleave>
+                        </s:element>
+                        <s:element name="streetAddress">
+                            <s:text/>
+                        </s:element>
+                    </s:interleave>
+                </s:element>
+                <s:element name="phoneNumber">
+                    <s:interleave>
+                        <s:attribute name="type">
+                            <s:value>array</s:value>
+                        </s:attribute>
+                        <s:zeroOrMore>
+                            <s:element name="_">
+                                <s:interleave>
+                                    <s:attribute name="type">
+                                        <s:value>object</s:value>
+                                    </s:attribute>
+                                    <s:element name="code">
+                                        <s:interleave>
+                                            <s:attribute name="type">
+                                                <s:value>number</s:value>
+                                            </s:attribute>
+                                            <s:data type="integer"/>
+                                        </s:interleave>
+                                    </s:element>
+                                    <s:element name="location">
+                                        <s:text/>
+                                    </s:element>
+                                </s:interleave>
+                            </s:element>
+                        </s:zeroOrMore>
+                    </s:interleave>
+                </s:element>
+            </s:interleave>
+        </s:element>
+    </s:start>
+</s:grammar>

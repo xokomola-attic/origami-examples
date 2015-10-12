@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+    <element name="json">
+      <interleave>
+        <ref name="isa-object"/>
+        <ref name="address"/>
+        <ref name="phonenumbers"/>
+      </interleave>
+    </element>
+  </start>
+  <define name="address">
+    <element name="address">
+      <interleave>
+        <ref name="isa-object"/>
+        <ref name="street-address"/>
+        <ref name="city"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="phonenumbers">
+    <element name="phoneNumber">
+      <interleave>
+        <ref name="isa-array"/>
+        <zeroOrMore>
+          <element name="_">
+            <ref name="phonenumber"/>
+          </element>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+  <define name="phonenumber">
+    <interleave>
+      <ref name="isa-object"/>
+      <ref name="location"/>
+      <ref name="code"/>
+    </interleave>
+  </define>
+  <define name="location">
+    <element name="location">
+      <text/>
+    </element>
+  </define>
+  <define name="code">
+    <element name="code">
+      <interleave>
+        <ref name="isa-number"/>
+        <data type="integer"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="street-address">
+    <element name="streetAddress">
+      <text/>
+    </element>
+  </define>
+  <define name="city">
+    <element name="city">
+      <text/>
+    </element>
+  </define>
+  <define name="isa-object">
+    <attribute name="type">
+      <value>object</value>
+    </attribute>
+  </define>
+  <define name="isa-array">
+    <attribute name="type">
+      <value>array</value>
+    </attribute>
+  </define>
+  <define name="isa-number">
+    <attribute name="type">
+      <value>number</value>
+    </attribute>
+  </define>
+</grammar>

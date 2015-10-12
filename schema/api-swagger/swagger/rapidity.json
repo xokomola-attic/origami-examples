@@ -1,0 +1,169 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.0.1",
+        "title": "Rapidity Print Order API",
+        "description": "Rapidity order printing service based on Django.\n"
+    },
+    "host": "api.apsmos.theapsgroup.com",
+    "basePath": "/api",
+    "schemes": [
+        "https"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "paths": {
+        "/orders": {
+            "get": {
+                "description": "Get Order List",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Orders"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Submit new order",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "file",
+                        "in": "formData",
+                        "required": true,
+                        "type": "file"
+                    },
+                    {
+                        "name": "ref",
+                        "in": "formData",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
+        },
+        "/{order-id}": {
+            "parameters": [
+                {
+                    "$ref": "#/parameters/order-id"
+                }
+            ],
+            "get": {
+                "description": "List Order",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Order"
+                        }
+                    },
+                    "400": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "parameters": {
+        "order-id": {
+            "name": "order-id",
+            "in": "path",
+            "description": "The order ID",
+            "type": "string",
+            "required": true
+        }
+    },
+    "definitions": {
+        "Orders": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "description": "Number of orders",
+                    "type": "integer"
+                },
+                "next": {
+                    "description": "Next page of orders",
+                    "type": "string"
+                },
+                "previous": {
+                    "description": "Previous page of orders",
+                    "type": "string"
+                },
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/OrderEntry"
+                    }
+                }
+            }
+        },
+        "OrderEntry": {
+            "type": "object",
+            "properties": {
+                "client_id": {
+                    "description": "Our reference",
+                    "type": "string"
+                },
+                "thar_id": {
+                    "description": "Thargat ID (their reference)",
+                    "type": "string"
+                }
+            }
+        },
+        "Order": {
+            "type": "object",
+            "properties": {
+                "thar_id": {
+                    "description": "Tharget ID (their reference)",
+                    "type": "string"
+                },
+                "line_details": {
+                    "description": "Order Lines",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/OrderLine"
+                    }
+                }
+            }
+        },
+        "OrderLine": {
+            "type": "object",
+            "properties": {
+                "TharsternJobStatus": {
+                    "description": "Printer status",
+                    "type": "string",
+                    "enum": [
+                        "Accepted",
+                        "Cancelled",
+                        "Others?"
+                    ]
+                },
+                "LineNumber": {
+                    "description": "Line sequence order (why a string?)",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
