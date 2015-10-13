@@ -50,12 +50,3 @@ declare function ex:creating-lists()
     (: there are other techniques involving rules but that's for a next tutorial :)
     
 };
-
-declare function ex:creating-lists()
-{
-    
-};
-
-(: each / do :)
-
-(: text :)

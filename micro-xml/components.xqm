@@ -2,24 +2,10 @@ xquery version "3.1";
 
 (: Contact List example (from Reagent tutorial) :)
 
-(: 
- : An incomplete experiment of rendering UI using a React/Reagent approach.
- :
- : Intended to be used in a client, may be somewhat userful with Saxon-CE
- : but not in itself. It's main use is seeing how components could be added
- : to mu. [fn, args] to be executed later. Or in an SVG context or schema. These components
- : are parts in the mu data structures.
- : render#1 could be implemented maybe via the walk pattern.
- : Not sure what it's relationship with apply#
- : Another insight is that embedding functions on attributes could make the template
- : structure react to message e.g. send on on-click to an element causes an effect and
- : could result in a different "DOM" or mu-doc. Reactive documents in a render loop.
- : The DOM analogy begs for having a DOM selection mechanism for mu.
- :)
 module namespace ex = 'http://xokomola.com/xquery/origami/examples';
 
 import module namespace o = 'http://xokomola.com/xquery/origami' 
-    at '../origami.xqm'; 
+    at '../../origami/origami.xqm'; 
 
 declare variable $ex:state :=
     map { 'contacts':
