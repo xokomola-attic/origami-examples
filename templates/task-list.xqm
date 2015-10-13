@@ -4,7 +4,6 @@ xquery version "3.1";
  : Templating a task list.
  :
  : @see http://jawher.net/2011/03/03/moulder-in-action/
- : @see http://scalate.github.io/scalate/which.html
  :)
 
 module namespace ex = 'http://xokomola.com/xquery/origami/examples';
@@ -25,9 +24,12 @@ declare variable $ex:template :=
     </ul>;
 
 declare variable $ex:tasks := (
-    map { 'type': 'bug', 'status': 'open', 'title': 'Urgent bug', 'description': 'This is an urgent bug.', 'urgent': true() },
-    map { 'type': 'bug', 'status': 'closed', 'title': 'Another bug', 'description': 'This is another bug.' },
-    map { 'type': 'feature', 'status': 'ready', 'title': 'Great feature', 'description': 'I see a great future for this feature.' }   
+    map { 'type': 'bug', 'status': 'open', 'title': 'Urgent bug', 
+      'description': 'This is an urgent bug.', 'urgent': true() },
+    map { 'type': 'bug', 'status': 'closed', 'title': 'Another bug', 
+      'description': 'This is another bug.' },
+    map { 'type': 'feature', 'status': 'ready', 'title': 'Great feature', 
+      'description': 'I see a great future for this feature.' }   
 );
     
 declare function ex:task-list-1($tasks as map(*)*)
@@ -57,9 +59,14 @@ declare %unit:test function ex:test-task-list-1()
   )
 };
 
-(: about the same length as the Java version but more readable :)
-(: a little bit longer than the Scala version but I could squish it further, and it's more readable :)
-(: NOTE: the way the XSLT stage works we apply will only find the rules embedded in a parent rule (li) :)
+(: 
+ : About the same length as the Java version but more readable
+ : a little bit longer than the Scala version but I could squish it further, 
+ : and it's more readable 
+ :
+ : NOTE: the way the XSLT stage works we apply will only find the rules 
+ : embedded in a parent rule (li) 
+ :)
 declare function ex:task-list-2($tasks as map(*)*)
 {
     o:doc($ex:template, 
@@ -118,7 +125,8 @@ declare %unit:test function ex:test-task-list-2()
   )
 };
 
-(: In the previous examples the tasks where 'baked in'. The compilation of the
+(: 
+ : In the previous examples the tasks where 'baked in'. The compilation of the
  : template involves a lot of work which can be re-used and may happen at compile time
  : rather than run-time.
  : This example has much better performance, it's about 50 times faster (mainly due to

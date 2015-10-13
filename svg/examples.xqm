@@ -1,11 +1,12 @@
 xquery version "3.1";
 
 (:~
- : Examples for μ-documents
+ : SVG examples
  :)
 module namespace ex = 'http://xokomola.com/xquery/origami/examples';
 
-import module namespace o = 'http://xokomola.com/xquery/origami' at '../origami.xqm'; 
+import module namespace o = 'http://xokomola.com/xquery/origami' 
+    at '../../origami/origami.xqm'; 
 
 declare variable $ex:svg := 
   ['rect', map { 'x': 0, 'y': 0 },
@@ -19,6 +20,10 @@ declare variable $ex:svg :=
     ]
   ];
 
+(: 
+ : Sets @height and @width attributes on a node to the sum of the child 
+ : elements dimensions 
+ :)
 declare function ex:layout($n) {
     let $tag := o:tag($n)
     let $atts := o:attributes($n)
@@ -35,10 +40,15 @@ declare function ex:layout($n) {
       array { $tag, $atts, $content }
 };
 
+declare function ex:svg-layout-postwalk()
+{
+    o:xml(o:postwalk($ex:svg, ex:layout#1))  
+};
+
 declare %unit:test function ex:test-postwalk-layout-example()
 {
     unit:assert-equals(
-      o:xml(o:postwalk(ex:layout#1, $ex:svg)),
+      ex:svg-layout-postwalk(),
       <rect width="180" height="80" x="0" y="0">
         <rect width="70" height="40">
           <rect width="30" height="20"/>
