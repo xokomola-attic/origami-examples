@@ -1,6 +1,8 @@
 xquery version "3.1";
 
 (: http://limpet.net/mbrubeck/2014/09/08/toy-layout-engine-5-boxes.html :)
+(: https://github.com/tel/frame :)
+(: https://github.com/tel/frame/blob/master/src/frame/fstate.clj :)
 
 module namespace ex = 'http://xokomola.com/xquery/origami/examples';
 
@@ -14,27 +16,39 @@ declare function ex:report($node)
         $node
 };
 
-declare function ex:layout-node($node, $container)
+declare function ex:advise-dimensions($node, $width, $height)
 {
-    let $c-attrs := o:attrs($container)
-    let $c-height := $c-attrs?height
-    let $c-width := $c-attrs?width
-    let $attrs := o:attrs($node)
-    let $height := ($attrs?height, $c-height)[1]
-    let $width := ($attrs?width, $c-width)[1]
-    return
-        array { 
-            o:tag($node), 
-            map { 'height': $height, 'width': $width }, 
-            o:children($node)
-        }
+    array {
+        o:tag($node),
+        map:merge((
+            map { 
+                'width': $width,
+                'height': $height
+            },
+            o:attrs($node)
+        )),
+        o:children($node)
+    }
 };
 
 declare function ex:layout-children($node)
 {
-    let $node-fn := ex:layout-node(?,$node)
-    return
-        $node => o:insert(o:map(o:children($node), $node-fn))
+    array {
+        o:tag($node),
+        o:attributes($node),
+        let $children := o:children($node)
+        let $attrs := o:attrs($node)
+        let $height := $attrs?height
+        let $width := $attrs?width
+        let $child-count := count($children)
+        let $child-explicit-height := o:map($children, function($n) { xs:integer(o:attrs($n)?height) })
+        let $advised-height := 
+            ($height - sum($child-explicit-height)) 
+            div ($child-count - count($child-explicit-height))
+        for $child at $pos in $children
+        return
+            ex:advise-dimensions($child, $width, $advised-height)
+    }
 };
 
 declare function ex:layout($mu)
