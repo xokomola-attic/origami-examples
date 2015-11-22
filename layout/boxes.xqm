@@ -33,34 +33,55 @@ declare function ex:advise-dimensions($node, $width, $height)
     }
 };
 
+declare function ex:collect-attribute($nodes, $attribute)
+{
+    fold-left(
+        $nodes,
+        [],
+        function($result,$item) {
+            array:append($result,o:attrs($item)($attribute))
+        }
+    )
+};
+
+declare function ex:count-attribute($nodes, $attribute)
+as xs:integer
+{
+    sum(
+        for $node in $nodes
+        where o:attrs($node)($attribute)
+        return 1
+    )
+};
+
 declare function ex:layout-node-children($node)
 {
     let $tag := o:tag($node)
     let $attrs := o:attrs($node)
     let $children := o:children($node)
     let $child-count := count($children)
+    let $width := $attrs?width
+    let $height := $attrs?height
     return
         array {
             $tag,
             $attrs,
             if ($tag = 'hbox') then
-                let $child-explicit-width := 
-                    o:map($children, function($n) { o:attrs($n)?width })
+                let $child-widths := ex:collect-attribute($children,'width')
                 let $advised-width := 
-                    ($attrs?width - sum($child-explicit-width)) 
-                    div ($child-count - count($child-explicit-width))
+                    ($width - sum($child-widths)) 
+                    div ($child-count - ex:count-attribute($children,'width'))
                 for $child in $children
                 return
-                    ex:advise-dimensions($child, $advised-width, $attrs?height)
+                    ex:advise-dimensions($child, $advised-width, $height)
             else
-                let $child-explicit-height := 
-                    o:map($children, function($n) { o:attrs($n)?height })
+                let $child-heights := ex:collect-attribute($children,'height') 
                 let $advised-height := 
-                    ($attrs?height - sum($child-explicit-height)) 
-                    div ($child-count - count($child-explicit-height))
+                    ($height - sum($child-heights)) 
+                    div ($child-count - ex:count-attribute($children,'height'))
                 for $child in $children
                 return
-                    ex:advise-dimensions($child, $attrs?width, $advised-height)
+                    ex:advise-dimensions($child, $width, $advised-height)
         }
 };
 
@@ -106,7 +127,10 @@ declare function ex:render-svg-node($node)
             'width': o:attrs($node)?width,
             'height': o:attrs($node)?height,
             'fill': ex:random-color(),
-            'fill-opacity': 0.1
+            'fill-opacity': 0.5,
+            'stroke-width': 1,
+            'stroke': 'black',
+            'stroke-opacity': 1
         }
     },
     o:children($node)
@@ -132,5 +156,5 @@ declare function ex:svg-builder()
 
 declare function ex:svg($mu)
 {
-    ['svg', reverse(o:postwalk($mu, ex:render-svg-node#1))]    
+    ['svg', o:postwalk($mu, ex:render-svg-node#1)]    
 };

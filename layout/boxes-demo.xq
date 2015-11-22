@@ -15,19 +15,18 @@ declare variable $ex:hbox :=
   </canvas>;
   
 declare variable $ex:vbox :=
-  <canvas width="640" height="480">
-    <vbox>
+    <vbox width="640" height="480">
+      <box height="300"/>
       <box height="200"/>
-        <vbox width="120">
-          <box height="10"/>
-          <box/>
-          <box height="20"/>
-        </vbox>
-      <box/>
-      <box/>
-    </vbox>
-  </canvas>;
+      <hbox height="100">
+        <box width="40"/>
+        <box width="20"/>
+      </hbox>
+    </vbox>;
 
 (: o:xml(ex:layout-top-down(o:doc($ex:hbox))) :)
 (: o:xml(ex:layout-bottom-up(o:doc($ex:vbox))) :)
-file:write('/Users/marcvangrootel/tmp/foo.svg', o:xml(ex:svg(ex:layout-top-down(o:doc($ex:vbox))), ex:svg-builder()))
+(: file:write('/Users/marcvangrootel/tmp/foo.svg', o:xml(ex:svg(ex:layout-top-down(o:doc($ex:vbox))), ex:svg-builder())) :)
+(: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:vbox))), ex:svg-builder()) :)
+
+ex:collect-attribute((['x'],['a',map{'a': 20}],['b',map{'a':10}]),'a')
