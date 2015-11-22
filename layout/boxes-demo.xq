@@ -16,7 +16,7 @@ declare variable $ex:hbox :=
   
 declare variable $ex:vbox :=
     <vbox width="640" height="480">
-      <box height="300"/>
+      <box height="200"/>
       <box height="200"/>
       <hbox height="100">
         <box width="40"/>
@@ -24,9 +24,9 @@ declare variable $ex:vbox :=
       </hbox>
     </vbox>;
 
-(: o:xml(ex:layout-top-down(o:doc($ex:hbox))) :)
+(: o:xml(ex:layout-top-down(o:doc($ex:vbox))) :)
 (: o:xml(ex:layout-bottom-up(o:doc($ex:vbox))) :)
-(: file:write('/Users/marcvangrootel/tmp/foo.svg', o:xml(ex:svg(ex:layout-top-down(o:doc($ex:vbox))), ex:svg-builder())) :)
+file:write('/Users/marcvangrootel/tmp/foo.svg', o:xml(ex:svg(ex:layout-top-down(o:doc($ex:hbox))), ex:svg-builder()))
 (: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:vbox))), ex:svg-builder()) :)
 
-ex:collect-attribute((['x'],['a',map{'a': 20}],['b',map{'a':10}]),'a')
+(: ex:sum-values([1,2,1,1]) :)

@@ -19,6 +19,7 @@ declare function ex:report($node)
 };
 
 declare function ex:advise-dimensions($node, $width, $height)
+as array(*)
 {
     array {
         o:tag($node),
@@ -33,7 +34,8 @@ declare function ex:advise-dimensions($node, $width, $height)
     }
 };
 
-declare function ex:collect-attribute($nodes, $attribute)
+declare function ex:collect-attribute($nodes, $attribute as xs:string)
+as array(*)
 {
     fold-left(
         $nodes,
@@ -44,17 +46,26 @@ declare function ex:collect-attribute($nodes, $attribute)
     )
 };
 
-declare function ex:count-attribute($nodes, $attribute)
+declare function ex:count-values($values as array(*))
 as xs:integer
 {
-    sum(
-        for $node in $nodes
-        where o:attrs($node)($attribute)
-        return 1
-    )
+    count($values?*)
 };
 
-declare function ex:advise($a,$b)
+declare function ex:sum-values($values as array(*))
+{
+    let $values := $values?*
+    return
+        array {
+            fold-left($values,(0),
+                function($result,$item) {
+                    ($result, sum($result[last()] + $item))
+                }
+            )
+        }
+};
+
+declare function ex:advise-values($a,$b)
 {
     let $b :=
         if ($b instance of array(*)) then 
@@ -73,6 +84,8 @@ declare function ex:layout-node-children($node)
     let $child-count := count($children)
     let $width := $attrs?width
     let $height := $attrs?height
+    let $x := ($attrs?x,0)[1]
+    let $y := ($attrs?y,0)[1]
     return
         array {
             $tag,
@@ -81,20 +94,32 @@ declare function ex:layout-node-children($node)
                 let $child-widths := ex:collect-attribute($children,'width')
                 let $advised-width := 
                     ($width - sum($child-widths)) 
-                    div ($child-count - ex:count-attribute($children,'width'))
-                let $advice := ex:advise($child-widths, $advised-width)
+                    div ($child-count - ex:count-values($child-widths))
+                let $advice := ex:advise-values($child-widths, $advised-width)
+                let $x := ex:sum-values($advice)
                 for $child at $pos in $children
                 return 
-                    $child => o:set-attr(map { 'height': $height, 'width': $advice($pos) })
+                    $child => o:set-attr(map {
+                        'x': $x($pos),
+                        'y': $y,
+                        'height': (o:attrs($child)?height,$height)[1], 
+                        'width': $advice($pos) 
+                    })
             else
                 let $child-heights := ex:collect-attribute($children,'height') 
                 let $advised-height := 
                     ($height - sum($child-heights)) 
-                    div ($child-count - ex:count-attribute($children,'height'))
-                let $advice := ex:advise($child-heights, $advised-height)
+                    div ($child-count - ex:count-values($child-heights))
+                let $advice := ex:advise-values($child-heights, $advised-height)
+                let $y := ex:sum-values($advice)
                 for $child at $pos in $children
                 return
-                    $child => o:set-attr(map { 'width': $width, 'height': $advice($pos) })
+                    $child => o:set-attr(map {
+                        'x': $x,
+                        'y': $y($pos),
+                        'height': $advice($pos), 
+                        'width': (o:attrs($child)?width,$width)[1] 
+                    })
         }
 };
 
@@ -136,11 +161,13 @@ declare function ex:render-svg-node($node)
 {
     array { 
         'rect', 
-        map { 'x': 0, 'y': 0, 
+        map { 
+            'x': o:attrs($node)?x, 
+            'y': o:attrs($node)?y, 
             'width': o:attrs($node)?width,
             'height': o:attrs($node)?height,
             'fill': ex:random-color(),
-            'fill-opacity': 0.5,
+            'fill-opacity': 0.8,
             'stroke-width': 1,
             'stroke': 'black',
             'stroke-opacity': 1
