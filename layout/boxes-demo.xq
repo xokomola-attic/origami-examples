@@ -9,7 +9,8 @@ declare variable $ex:hbox :=
     <hbox>
       <box width="10"/>
       <box height="80"/>
-      <box width="300"/>
+      <box/>
+      <box width="320"/>
     </hbox>
   </canvas>;
   
@@ -27,5 +28,6 @@ declare variable $ex:vbox :=
     </vbox>
   </canvas>;
 
-o:xml(ex:layout-top-down(o:doc($ex:hbox)))
+(: o:xml(ex:layout-top-down(o:doc($ex:hbox))) :)
 (: o:xml(ex:layout-bottom-up(o:doc($ex:vbox))) :)
+file:write('/Users/marcvangrootel/tmp/foo.svg', o:xml(ex:svg(ex:layout-top-down(o:doc($ex:vbox))), ex:svg-builder()))

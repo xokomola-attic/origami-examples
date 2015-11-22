@@ -97,3 +97,40 @@ declare function ex:layout-bottom-up($mu)
 {
     o:postwalk($mu, ex:layout-node#1)
 };
+
+declare function ex:render-svg-node($node)
+{
+    array { 
+        'rect', 
+        map { 'x': 0, 'y': 0, 
+            'width': o:attrs($node)?width,
+            'height': o:attrs($node)?height,
+            'fill': ex:random-color(),
+            'fill-opacity': 0.1
+        }
+    },
+    o:children($node)
+};
+
+declare function ex:random-color()
+{
+    concat(
+        'rgb(',
+        random:integer(255), ',',
+        random:integer(255), ',',
+        random:integer(255),
+        ')'
+    )
+};
+
+declare function ex:svg-builder()
+{
+    o:default-ns-builder(
+        'http://www.w3.org/2000/svg'
+    )
+};
+
+declare function ex:svg($mu)
+{
+    ['svg', reverse(o:postwalk($mu, ex:render-svg-node#1))]    
+};
