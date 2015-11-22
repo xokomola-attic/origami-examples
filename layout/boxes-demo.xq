@@ -4,7 +4,16 @@ import module namespace o = 'http://xokomola.com/xquery/origami'
 import module namespace ex = 'http://xokomola.com/xquery/origami/examples'
     at 'boxes.xqm'; 
 
-declare variable $ex:boxes :=
+declare variable $ex:hbox :=
+  <canvas width="640" height="480">
+    <hbox>
+      <box width="10"/>
+      <box height="80"/>
+      <box width="300"/>
+    </hbox>
+  </canvas>;
+  
+declare variable $ex:vbox :=
   <canvas width="640" height="480">
     <vbox>
       <box height="200"/>
@@ -18,4 +27,5 @@ declare variable $ex:boxes :=
     </vbox>
   </canvas>;
 
-o:xml(ex:layout(o:doc($ex:boxes)))
+o:xml(ex:layout-top-down(o:doc($ex:hbox)))
+(: o:xml(ex:layout-bottom-up(o:doc($ex:vbox))) :)
