@@ -54,6 +54,17 @@ as xs:integer
     )
 };
 
+declare function ex:advise($a,$b)
+{
+    let $b :=
+        if ($b instance of array(*)) then 
+            $b
+        else
+            array { for $i in 1 to array:size($a) return $b }
+    return
+        array:for-each-pair($a,$b, function($a,$b) { ($a,$b)[1] })
+};
+
 declare function ex:layout-node-children($node)
 {
     let $tag := o:tag($node)
@@ -71,17 +82,19 @@ declare function ex:layout-node-children($node)
                 let $advised-width := 
                     ($width - sum($child-widths)) 
                     div ($child-count - ex:count-attribute($children,'width'))
-                for $child in $children
-                return
-                    ex:advise-dimensions($child, $advised-width, $height)
+                let $advice := ex:advise($child-widths, $advised-width)
+                for $child at $pos in $children
+                return 
+                    $child => o:set-attr(map { 'height': $height, 'width': $advice($pos) })
             else
                 let $child-heights := ex:collect-attribute($children,'height') 
                 let $advised-height := 
                     ($height - sum($child-heights)) 
                     div ($child-count - ex:count-attribute($children,'height'))
-                for $child in $children
+                let $advice := ex:advise($child-heights, $advised-height)
+                for $child at $pos in $children
                 return
-                    ex:advise-dimensions($child, $width, $advised-height)
+                    $child => o:set-attr(map { 'width': $width, 'height': $advice($pos) })
         }
 };
 
