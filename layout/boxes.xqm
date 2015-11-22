@@ -34,6 +34,11 @@ as array(*)
     }
 };
 
+declare function ex:collect-tag($nodes)
+{
+    for-each($nodes, o:tag#1)
+};
+
 declare function ex:collect-attribute($nodes, $attribute as xs:string)
 as array(*)
 {
@@ -92,6 +97,17 @@ declare function ex:layout-node-children($node)
             $attrs,
             if ($child-count = 0) then
                 ()
+            else if (every $tag in ex:collect-tag($children) satisfies $tag = 'layer') then
+                (: Note that layer elements are only allowed in specific places
+                   this is not validated with this code :)
+                for $child in $children
+                return
+                    $child => o:set-attr(map {
+                        'x': $x,
+                        'y': $y,
+                        'height': $height, 
+                        'width': $width 
+                    })
             else if ($tag = 'hbox') then
                 let $child-widths := ex:collect-attribute($children,'width')
                 let $advised-width := 
@@ -164,20 +180,23 @@ declare function ex:render-svg-node($node)
     let $tag := o:tag($node)
     where $tag != 'spacer'
     return (
-        array { 
-            'rect', 
-            map { 
-                'x': o:attrs($node)?x, 
-                'y': o:attrs($node)?y, 
-                'width': o:attrs($node)?width,
-                'height': o:attrs($node)?height,
-                'fill': ex:random-color(),
-                'fill-opacity': 0.8,
-                'stroke-width': 1,
-                'stroke': 'black',
-                'stroke-opacity': 1
+        if ($tag != 'layer') then
+            array { 
+                'rect', 
+                map { 
+                    'x': o:attrs($node)?x, 
+                    'y': o:attrs($node)?y, 
+                    'width': o:attrs($node)?width,
+                    'height': o:attrs($node)?height,
+                    'fill': ex:random-color(),
+                    'fill-opacity': 0.8,
+                    'stroke-width': 1,
+                    'stroke': 'black',
+                    'stroke-opacity': 1
+                }
             }
-        },
+        else
+            (),
         o:children($node)
     )
 };
