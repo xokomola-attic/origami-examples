@@ -17,6 +17,7 @@ declare variable $ex:hbox :=
 declare variable $ex:vbox :=
     <vbox width="640" height="480">
       <box height="200"/>
+      <spacer/>
       <box height="200"/>
       <hbox>
         <spacer/>
@@ -27,9 +28,18 @@ declare variable $ex:vbox :=
       </hbox>
     </vbox>;
 
+declare function local:save($svg)
+{
+  file:write(
+    '/Users/marcvangrootel/tmp/foo.svg',
+    o:xml(ex:svg($svg), ex:svg-builder())
+  )
+};
 (: o:xml(ex:layout-top-down(o:doc($ex:vbox))) :)
 (: o:xml(ex:layout-bottom-up(o:doc($ex:vbox))) :)
-file:write('/Users/marcvangrootel/tmp/foo.svg', o:xml(ex:svg(ex:layout-top-down(o:doc($ex:vbox))), ex:svg-builder()))
+(: file:write(, o:xml(ex:svg(ex:layout-top-down(o:doc($ex:vbox))), ex:svg-builder())) :)
 (: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:vbox))), ex:svg-builder()) :)
 
 (: ex:sum-values([1,2,1,1]) :)
+
+local:save(ex:layout-top-down(ex:mosaic(4,4)))

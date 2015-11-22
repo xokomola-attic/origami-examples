@@ -90,7 +90,9 @@ declare function ex:layout-node-children($node)
         array {
             $tag,
             $attrs,
-            if ($tag = 'hbox') then
+            if ($child-count = 0) then
+                ()
+            else if ($tag = 'hbox') then
                 let $child-widths := ex:collect-attribute($children,'width')
                 let $advised-width := 
                     ($width - sum($child-widths)) 
@@ -201,4 +203,19 @@ declare function ex:svg-builder()
 declare function ex:svg($mu)
 {
     ['svg', o:postwalk($mu, ex:render-svg-node#1)]    
+};
+
+declare function ex:mosaic($i,$j)
+{
+    let $cell-width := 100
+    return
+        ['vbox', map { 'width': $i * $cell-width, 'height': $j * $cell-width },
+            for $row in 1 to $i
+            return
+                ['hbox',
+                    for $col in 1 to $j
+                    return
+                        ['box']
+                ]
+        ]
 };
