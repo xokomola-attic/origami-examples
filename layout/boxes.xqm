@@ -159,21 +159,25 @@ declare function ex:layout-bottom-up($mu)
 
 declare function ex:render-svg-node($node)
 {
-    array { 
-        'rect', 
-        map { 
-            'x': o:attrs($node)?x, 
-            'y': o:attrs($node)?y, 
-            'width': o:attrs($node)?width,
-            'height': o:attrs($node)?height,
-            'fill': ex:random-color(),
-            'fill-opacity': 0.8,
-            'stroke-width': 1,
-            'stroke': 'black',
-            'stroke-opacity': 1
-        }
-    },
-    o:children($node)
+    let $tag := o:tag($node)
+    where $tag != 'spacer'
+    return (
+        array { 
+            'rect', 
+            map { 
+                'x': o:attrs($node)?x, 
+                'y': o:attrs($node)?y, 
+                'width': o:attrs($node)?width,
+                'height': o:attrs($node)?height,
+                'fill': ex:random-color(),
+                'fill-opacity': 0.8,
+                'stroke-width': 1,
+                'stroke': 'black',
+                'stroke-opacity': 1
+            }
+        },
+        o:children($node)
+    )
 };
 
 declare function ex:random-color()
