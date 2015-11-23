@@ -29,17 +29,23 @@ declare variable $ex:vbox :=
     </vbox>;
 
 declare variable $ex:layers :=
-    <vbox width="640" height="480">
-      <layer>
+    <vbox width="640" height="480" layers="b a">
+      <layer id="a">
         <vbox>
           <box/>
           <box/>
         </vbox>
       </layer>
-      <layer>
+      <layer id="b">
         <hbox>
-          <box/>
-          <box/>
+          <spacer/>
+          <vbox>
+            <spacer/>
+            <box/>
+            <spacer/>
+            <box/>
+            <spacer/>
+          </vbox>
         </hbox>
       </layer>
     </vbox>;
@@ -56,7 +62,7 @@ declare function local:save($svg)
 (: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:layers)))) :)
 local:save(ex:layout-top-down(o:doc($ex:layers)))
 (: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:layers))), ex:svg-builder()) :)
-
+ (: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:layers)))) :)
 (: ex:sum-values([1,2,1,1]) :)
 
 (: local:save(ex:layout-top-down(ex:mosaic(4,4))) :)

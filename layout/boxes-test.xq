@@ -28,9 +28,9 @@ declare %unit:test function test:vbox-top-down()
   unit:assert-equals(
       o:xml(b:layout-top-down(o:doc($test:vbox))),
       <canvas width="640" height="480">
-        <vbox width="640" height="480">
-          <box width="640" height="10"/>
-          <box width="640" height="470"/>
+        <vbox width="640" height="480" x="0" y="0">
+          <box width="640" height="10" x="0" y="0"/>
+          <box width="640" height="470" x="0" y="10"/>
         </vbox>
       </canvas>
   )
@@ -41,10 +41,10 @@ declare %unit:test function test:hbox-top-down()
   unit:assert-equals(
       o:xml(b:layout-top-down(o:doc($test:hbox))),
       <canvas width="640" height="480">
-        <hbox width="640" height="480">
-          <box width="10" height="480"/>
-          <box width="610" height="480"/>
-          <box width="20" height="480"/>
+        <hbox width="640" height="480" x="0" y="0">
+          <box width="10" height="480" x="0" y="0"/>
+          <box width="610" height="480" x="10" y="0"/>
+          <box width="20" height="480" x="620" y="0"/>
         </hbox>
       </canvas>
   )
