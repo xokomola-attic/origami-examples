@@ -38,8 +38,8 @@ declare function local:to-json($xml)
     o:json(o:doc($xml))
 };
 
-(: serialize(json:to-json(json:xf(o:doc($local:xml))), map {'method': 'json'}) :)
+serialize(json:to-json(json:xf(o:doc($local:xml))), map {'method': 'json'})
 (: json:to-json(json:xf(o:doc($local:xml))) :)
-o:xml(json:xf(o:doc($local:xml)))
+(: o:xml(json:xf(o:doc($local:xml))) :)
 
 (: local:to-json($local:xml) :)

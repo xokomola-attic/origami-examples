@@ -16,6 +16,11 @@ declare function json:xf($nodes as item()*)
     json:xf($nodes, ())
 };
 
+(:~
+ : Transform XML to a more JSON friendly format by changing attributes into elements,
+ : merging same named siblings into an array.
+ : After this transform we can use the to-json function.
+ :)
 declare function json:xf($nodes as item()*, $wrap as xs:string?)
 {
     $nodes ! (
@@ -24,7 +29,6 @@ declare function json:xf($nodes as item()*, $wrap as xs:string?)
             let $attrs := json:attrs-to-elements(o:attrs(.))
             let $children := o:children(.)
             let $element-children := o:filter($children, o:is-element#1)
-            let $other-children := o:filter($children, o:is-text-node#1)
             return
                 array {
                     ($wrap, o:tag(.))[1],
@@ -57,6 +61,10 @@ declare %private function json:attrs-to-elements($attrs as map(*))
         [$name, data($attrs($name))]
 };
 
+(:~
+ : Renders a JSON friendly Mu data structure to a JSON string by first building
+ : a non-XML XDM value.
+ :)
 declare function json:to-json($nodes as item()*)
 {
     if (count(o:filter($nodes, o:is-element#1)) > 0) then
