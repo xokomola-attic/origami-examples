@@ -92,69 +92,72 @@ declare function ex:layout-node-children($node)
     let $x := ($attrs?x, 0)[1]
     let $y := ($attrs?y, 0)[1]
     return
-        array {
-            $tag,
-            $attrs,
-            if ($child-count = 0) then
-                ()
-            else if (every $tag in ex:collect-tag($children) satisfies $tag = 'layer') then
-                fold-left(
-                    $children,
-                    (),
-                    function($result, $child) {
-                        ($result, o:set-attr($child, map {
-                            'x': $x,
-                            'y': $y,
-                            'height': $height, 
-                            'width': $width 
-                        }))                    
-                    }
-                )
-            else if ($tag = 'hbox') then
-                let $child-widths := ex:collect-attribute($children,'width')
-                let $advised-width := 
-                    ($width - sum($child-widths)) 
-                    div ($child-count - ex:count-values($child-widths))
-                let $advice := ex:advise-values($child-widths, $advised-width)
-                let $x := ex:sum-values($advice)
-                return
+        if (starts-with($tag,'svg:')) then
+            $node
+        else
+            array {
+                $tag,
+                $attrs,
+                if ($child-count = 0) then
+                    ()
+                else if (every $tag in ex:collect-tag($children) satisfies $tag = 'layer') then
                     fold-left(
                         $children,
                         (),
                         function($result, $child) {
-                            let $pos := count($result) + 1
-                            return
-                                ($result, o:set-attr($child, map {
-                                    'x': $x($pos),
-                                    'y': $y,
-                                    'height': (o:attrs($child)?height,$height)[1], 
-                                    'width': $advice($pos) 
-                                }))
+                            ($result, o:set-attr($child, map {
+                                'x': $x,
+                                'y': $y,
+                                'height': $height, 
+                                'width': $width 
+                            }))                    
                         }
                     )
-            else
-                let $child-heights := ex:collect-attribute($children,'height') 
-                let $advised-height := 
-                    ($height - sum($child-heights)) 
-                    div ($child-count - ex:count-values($child-heights))
-                let $advice := ex:advise-values($child-heights, $advised-height)
-                let $y := ex:sum-values($advice)
-                return
-                    fold-left(
-                        $children,
-                        (),
-                        function($result, $child) {
-                            let $pos := count($result) + 1
-                            return
-                                ($result, o:set-attr($child, map {
-                                    'x': $x,
-                                    'y': $y($pos),
-                                    'height': $advice($pos), 
-                                    'width': (o:attrs($child)?width,$width)[1] 
-                                }))
-                        }
-                    )
-        }
+                else if ($tag = 'hbox') then
+                    let $child-widths := ex:collect-attribute($children,'width')
+                    let $advised-width := 
+                        ($width - sum($child-widths)) 
+                        div ($child-count - ex:count-values($child-widths))
+                    let $advice := ex:advise-values($child-widths, $advised-width)
+                    let $x := ex:sum-values($advice)
+                    return
+                        fold-left(
+                            $children,
+                            (),
+                            function($result, $child) {
+                                let $pos := count($result) + 1
+                                return
+                                    ($result, o:set-attr($child, map {
+                                        'x': $x($pos),
+                                        'y': $y,
+                                        'height': (o:attrs($child)?height,$height)[1], 
+                                        'width': $advice($pos) 
+                                    }))
+                            }
+                        )
+                else
+                    let $child-heights := ex:collect-attribute($children,'height') 
+                    let $advised-height := 
+                        ($height - sum($child-heights)) 
+                        div ($child-count - ex:count-values($child-heights))
+                    let $advice := ex:advise-values($child-heights, $advised-height)
+                    let $y := ex:sum-values($advice)
+                    return
+                        fold-left(
+                            $children,
+                            (),
+                            function($result, $child) {
+                                let $pos := count($result) + 1
+                                return
+                                    ($result, o:set-attr($child, map {
+                                        'x': $x,
+                                        'y': $y($pos),
+                                        'height': $advice($pos), 
+                                        'width': (o:attrs($child)?width,$width)[1] 
+                                    }))
+                            }
+                        )
+            }
 };
 
 declare function ex:layout-node($node)
@@ -195,9 +198,12 @@ declare function ex:render-svg-node($node)
 {
     let $tag := o:tag($node)
     let $attrs := o:attrs($node)
+    let $children := o:children($node)
     where $tag != 'spacer'
     return (
-        if ($tag != 'layer') then
+        if (starts-with($tag,'svg:')) then
+            array { substring-after($tag,'svg:'), $attrs, $children }
+        else if ($tag != 'layer') then
             (
                 array { 'rect',
                     map:remove(map:merge((
@@ -211,12 +217,12 @@ declare function ex:render-svg-node($node)
                         $attrs
                     )), 'layers')
                 },
-                o:children($node)
+                $children
             )
         else
             array { 'g',
                 o:select-keys($attrs,'id'),
-                o:children($node)
+                $children
             }
     )
 };
@@ -234,10 +240,11 @@ declare function ex:random-color()
 
 declare function ex:svg-builder()
 {
-    o:default-ns-builder(o:ns-builder(
-        map {
-            'v': 'http://xokomola.com/xquery/collage'
-        }), 'http://www.w3.org/2000/svg')
+    o:ns-builder((
+        ['v', 'http://xokomola.com/xquery/collage'],
+        ['svg', 'http://www.w3.org/2000/svg'],
+        ['', 'http://www.w3.org/2000/svg']
+    ))
 };
 
 declare function ex:svg($mu)

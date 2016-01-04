@@ -1,0 +1,182 @@
+<restaurants>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.43535</lat>
+    <long>5.48404</long>
+    <name>Zarzo</name>
+  </restaurant>
+  <restaurant>
+    <rating>5.0</rating>
+    <lat>51.43932</lat>
+    <long>5.479162</long>
+    <name>Roma IJssalon</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.43665</lat>
+    <long>5.48531</long>
+    <name>Afghani &amp; Zo</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.44783</lat>
+    <long>5.45484</long>
+    <name>Intelligentia Ice</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.441216</lat>
+    <long>5.481324</long>
+    <name>Ilios</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.45801</lat>
+    <long>5.45827</long>
+    <name>Friture Martin Zwerts</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.43473</lat>
+    <long>5.483829</long>
+    <name>Dijk9</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.43839</lat>
+    <long>5.471508</long>
+    <name>1910 Restaurant &amp; Bar</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.438168</lat>
+    <long>5.47453</long>
+    <name>Jiu.nu</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.43786</lat>
+    <long>5.47522</long>
+    <name>Wiesen Restaurant</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.441757</lat>
+    <long>5.46605</long>
+    <name>Avant-Garde van Groeninge</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.44123</lat>
+    <long>5.47966</long>
+    <name>Restaurant Giornale</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.44029</lat>
+    <long>5.47945</long>
+    <name>De Bakgigant</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.458256</lat>
+    <long>5.482568</long>
+    <name>Bamiyan</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.44119</lat>
+    <long>5.479727</long>
+    <name>Sopranos Restaurant Eindhoven</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.43687</lat>
+    <long>5.476065</long>
+    <name>Stadsbranderij Eindhoven</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.43679</lat>
+    <long>5.47838</long>
+    <name>Lithos</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.43951</lat>
+    <long>5.476201</long>
+    <name>Coffeelovers Van Piere</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.440952</lat>
+    <long>5.480959</long>
+    <name>Rodeo</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.43909</lat>
+    <long>5.46771</long>
+    <name>Kyoto Sushi</name>
+  </restaurant>
+  <restaurant>
+    <rating>5.0</rating>
+    <lat>51.44883</lat>
+    <long>5.44663</long>
+    <name>Pinkie Patisserie</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.426716</lat>
+    <long>5.480479</long>
+    <name>Restaurant Parkzicht</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.43375</lat>
+    <long>5.48411</long>
+    <name>Sandwich Willy</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.44126</lat>
+    <long>5.47925</long>
+    <name>Eetcafe D'n Hertog</name>
+  </restaurant>
+  <restaurant>
+    <rating>5.0</rating>
+    <lat>51.430115</lat>
+    <long>5.471293</long>
+    <name>Guilty Pleasures Food</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.476604</lat>
+    <long>5.437567</long>
+    <name>De Luytervelde</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.43771</lat>
+    <long>5.479979</long>
+    <name>Street Food</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.5</rating>
+    <lat>51.43665</lat>
+    <long>5.46717</long>
+    <name>'T Vonderke</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.0</rating>
+    <lat>51.437325</lat>
+    <long>5.478921</long>
+    <name>Ribs Factory</name>
+  </restaurant>
+  <restaurant>
+    <rating>4.0</rating>
+    <lat>51.453545</lat>
+    <long>5.49765</long>
+    <name>De Karpendonkse Hoeve</name>
+  </restaurant>
+</restaurants>

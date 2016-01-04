@@ -1,0 +1,25 @@
+<xlf:xliff version="1.2"
+    xmlns:xlf="urn:oasis:names:tc:xliff:document:1.2">
+    <xlf:header>
+        <xlf:skl>
+            <xlf:internal-file form="application/xhtml+xml">
+                <html xmlns:its="http://www.w3.org/2005/11/its" >
+                    <head>
+                        <meta charset="utf-8"/>
+                    </head>
+                    <body>
+                        <p its:translate="yes">Hello world</p>
+                    </body>
+                </html>
+            </xlf:internal-file>
+        </xlf:skl>
+    </xlf:header>
+    <xlf:file original="document.html" source-language="en" target-language="nl" datatype="xhtml">
+        <xlf:body>
+            <xlf:trans-unit id="resource-id">
+                <xlf:source>Hello world</xlf:source>
+                <xlf:target>Bonjour le monde</xlf:target>
+            </xlf:trans-unit>
+        </xlf:body>
+    </xlf:file>
+</xlf:xliff>

@@ -4,6 +4,8 @@ import module namespace o = 'http://xokomola.com/xquery/origami'
 import module namespace ex = 'http://xokomola.com/xquery/origami/examples'
     at 'boxes.xqm'; 
 
+declare namespace svg = 'http://www.w3.org/2000/svg';
+
 declare variable $ex:hbox :=
   <canvas width="640" height="480">
     <hbox>
@@ -32,18 +34,22 @@ declare variable $ex:layers :=
     <vbox width="640" height="480" layers="b a">
       <layer id="a">
         <vbox>
-          <box/>
-          <box/>
+          <box>
+            <svg:text>foo</svg:text>
+          </box>
+          <box>
+            <svg:text>bar</svg:text>
+          </box>
         </vbox>
       </layer>
       <layer id="b">
         <hbox>
           <spacer/>
-          <vbox>
+          <vbox fill="yellow">
             <spacer/>
-            <box/>
+            <box fill="red"/>
             <spacer/>
-            <box/>
+            <box fill="red"/>
             <spacer/>
           </vbox>
         </hbox>
@@ -62,7 +68,7 @@ declare function local:save($svg)
 (: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:layers)))) :)
 local:save(ex:layout-top-down(o:doc($ex:layers)))
 (: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:layers))), ex:svg-builder()) :)
- (: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:layers)))) :)
+(: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:layers)))) :)
 (: ex:sum-values([1,2,1,1]) :)
 
 (: local:save(ex:layout-top-down(ex:mosaic(4,4))) :)
