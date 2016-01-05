@@ -2,9 +2,18 @@ xquery version "3.1";
 
 module namespace ex = 'http://xokomola.com/xquery/origami/examples';
 
-(: A simple demo for ITS 2.0 and XLIFF 1.2 
-   A full ITS 2.0 processor will be more complex than this
+(:~
+ : A simple demo for ITS 2.0 and XLIFF 1.2 
+ : A real ITS 2.0 processor will be more complex than this.
+ :
+ : See also: https://wiki.oasis-open.org/xliff/FAQ
+ : See also: http://docs.oasis-open.org/xliff/v1.2/xliff-profile-html/xliff-profile-html-1.2-cd02.html
  :)
+
+(: TODO: check if we should go for XLIFF 2.0 :)
+(: TODO: fix namespace issues for o:xml :)
+(: TODO: build a function to take the XLIFF and generate the translated HTML :)
+
 import module namespace o = 'http://xokomola.com/xquery/origami'
     at '../../origami/origami.xqm';
 
@@ -12,45 +21,55 @@ declare namespace its = 'http://www.w3.org/2005/11/its';
 declare namespace xliff = 'urn:oasis:names:tc:xliff:document:1.2';
 declare namespace html = 'http://www.w3.org/1999/xhtml';
 
-(: ISSUE: have to sort out the namespace issues :)
-(: ISSUE: its:translateRules uses selectors like '//code' :)
-(: ISSUE: when catching 'p' with a rule then a rule like 'code' 
-   won't match unless embedded in the 'p' rule :)
-(: I believe this requires a different type of stylesheet where all selectors
-   live in the same mode, suitable for using absolute xpath selectors :)
-
-declare variable $ex:xliff-builder-wrong :=
-    o:transformer(
-        ['xlf:xliff',
-            ['xlf:file/@source-language', function($n,$d) { $d?srclang }],
-            ['xlf:file/@target-language',  function($n,$d) { $d?tgtlang }],
-            ['xlf:file/@original',  function($n,$d) { $d?original }],
-            ['xlf:file/@*', function($n,$d) { $d?datatype }]
-        ], 
-        o:ns((
-            ['xlf', 'urn:oasis:names:tc:xliff:document:1.2'],
-            ['o', $o:ns?origami],
-            ['', $o:ns?html]
-        ))
-    );
+declare variable $ex:ns :=
+    o:ns((
+        ['xlf', 'urn:oasis:names:tc:xliff:document:1.2'],
+        ['its', 'http://www.w3.org/2005/11/its'],
+        ['', $o:ns?html]
+    ));
+        
+(: TODO: o:transformer won't work :)
+(: TODO: xlf:internal-file should add ids for tus :)
 
 declare variable $ex:xliff-builder :=
-    o:transformer(
+    o:builder(
         ['xlf:xliff',
+            ['xlf:internal-file',
+                function($n,$d) {
+                    $n =>
+                    o:set-attrs(map {
+                        'form': 'application/xhtml+xml'
+                    }) =>
+                    o:insert($d?content)
+                }
+            ],
             ['xlf:file',
                 function($n,$d) { 
-                    $n 
-                    => o:set-attr('source-language', $d?srclang)
-                    => o:set-attr('target-language', $d?tgtlang)
-                    => o:set-attr('original', $d?original)
+                    $n => 
+                    o:set-attrs(map {
+                        'source-language': $d?srclang,
+                        'target-language': $d?tgtlang,
+                        'original': $d?original
+                    }) =>
+                    o:apply($d)
+                }
+            ],
+            ['xlf:trans-unit',
+                function($n,$d) {
+                    for $html at $id in ex:extract-translatable($d?content)
+                    let $tu := map { 
+                        'content': $html,
+                        'id': $id,
+                        'resname': o:tag($html),
+                        'srclang': $d?srclang,
+                        'tgtlang': $d?tgtlang
+                    }
+                    let $xlf := ex:xliff-trans-unit($n,$tu)
+                    return $xlf
                 }
             ]
-        ], 
-        o:ns((
-            ['xlf', 'urn:oasis:names:tc:xliff:document:1.2'],
-            ['o', $o:ns?origami],
-            ['', $o:ns?html]
-        ))
+        ],
+        $ex:ns
     );
 
 declare variable $ex:xliff-template :=
@@ -58,7 +77,10 @@ declare variable $ex:xliff-template :=
         o:read-xml(concat(file:base-dir(),'template.xlf')),
         $ex:xliff-builder
     );
-    
+
+(:~
+ : Create a "translate" rule.
+ :)
 declare function ex:translate-rule($xpath, $translate)
 {
     [$xpath, function($n) {
@@ -68,13 +90,19 @@ declare function ex:translate-rule($xpath, $translate)
     }]
 };
 
+(:~
+ : The ITS rules that describe what should be translated in an HTML document.
+ :)
 declare variable $ex:html-rules :=
     (
         ex:translate-rule('//head/title', 'yes'),
         ex:translate-rule('//p', 'yes')
     );
 
-(: TODO: using (...) is necessary to get what we need (investigate) :)
+(:~
+ : Create the ITS rules that describe the annotation transform.
+ : This will also add the built-in standard HTML rules.
+ :)
 declare function ex:its-rules($its)
 {
     ['/*', (
@@ -87,20 +115,20 @@ declare function ex:its-rules($its)
     )]
 };
 
+(:~
+ : Build an annotation transformer (a function) using the provided 
+ : ITS rules (rules.its).
+ :)
 declare function ex:its-builder($its)
 {
-    o:transformer(
-        ex:its-rules($its),
-        o:ns((
-            ['xlf', 'urn:oasis:names:tc:xliff:document:1.2'],
-            ['o', $o:ns?origami],
-            ['h', $o:ns?html],
-            ['', $o:ns?html]
-        ))
-    )
+    o:transformer(ex:its-rules($its), $ex:ns)
 };
 
-(: Extract translatable nodes using ITS annotations :)
+(:~
+ : Extract translatable elements using ITS annotations.
+ : Such an element may contain other (inline) elements
+ : that have their own translate attribute. 
+ :)
 declare function ex:extract-translatable($doc)
 {
     $doc ! (
@@ -111,8 +139,96 @@ declare function ex:extract-translatable($doc)
     )
 };
 
-(: Prepare ITS prepped HTML and generate XLIFF :)
-declare function ex:xliff($doc)
+(:~
+ : Annotates HTML and generates XLIFF file. 
+ :)
+declare function ex:xliff($path)
 {
-    1
+    let $html := ex:prepare-html($path)
+    let $res := map {
+        'srclang': 'en',
+        'tgtlang': 'nl',
+        'datatype': 'xhtml',
+        'original': $path,
+        'content': $html
+    }
+    where exists($html)
+    return
+        o:xml(o:apply($ex:xliff-template, $res), o:ns-builder($ex:ns))
+};
+
+(:~
+ : Takes an XLIFF trans-unit as template and uses an HTML translation unit map
+ : as data for generating the final XLIFF translation unit.
+ :)
+declare function ex:xliff-trans-unit($tpl, $tu)
+{
+    (: TODO: adapt o:xml and namespace code to handle 'xml:lang' correctly :)
+    (: TODO: add other attributes (needs-translation etc.) :)
+    let $content := ex:xliff-content($tu?content)
+    return
+        $tpl => 
+        o:set-attrs(map {
+            'id': $tu?id,
+            'resname': $tu?resname
+        }) =>
+        o:insert(
+            o:wrap(
+                $content, 
+                ['xlf:source', 
+                    map { 'lang': $tu?srclang }
+                ]
+            )
+        ) => 
+        o:insert-after(
+            o:wrap(
+                $content, 
+                ['xlf:target', 
+                    map { 'lang': $tu?tgtlang }
+                ]
+            )
+        )
+};
+
+(: TODO: inlines should be using ids :)
+
+declare function ex:xliff-content($mu)
+{
+    o:postwalk($mu, function($n) {
+        typeswitch($n)
+        case array(*) return
+            let $html-tag := o:tag($n)
+            let $children := o:children($n)
+            let $translatable := o:attrs($n)?translate = 'yes'
+            return
+                if ($translatable) then
+                    array {
+                       'xlf:g',
+                       map { 'ctype': $html-tag },
+                       $children
+                    }
+                else
+                    array {
+                        'xlf:x',
+                        map { 'ctype': $html-tag, 'equiv-text': o:ntext($n) }
+                    }
+        default return
+            $n
+    }) => 
+    o:unwrap()
+};
+
+(:~
+ : Ties everything together: annotate HTML with ITS data, extract the
+ : translatable units from the HTML and use an XLIFF template to generate
+ : a translatable XLIFF files.
+ :)
+declare function ex:prepare-html($path)
+{
+    let $its := o:read-xml(concat(file:base-dir(), 'rules.its'))
+    let $builder := ex:its-builder($its)
+    let $html := o:read-html($path)
+    where exists($html)
+    return
+        o:apply($builder($html))
 };
