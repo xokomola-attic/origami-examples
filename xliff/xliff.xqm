@@ -84,9 +84,9 @@ declare variable $ex:xliff-template :=
 declare function ex:translate-rule($xpath, $translate)
 {
     [$xpath, function($n) {
-        $n
-        => o:advise-attr('translate', $translate)
-        => o:apply()
+        $n => 
+        o:advise-attr('translate', $translate) => 
+        o:apply()
     }]
 };
 
