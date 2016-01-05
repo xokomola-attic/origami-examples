@@ -13,6 +13,7 @@ module namespace ex = 'http://xokomola.com/xquery/origami/examples';
 (: TODO: check if we should go for XLIFF 2.0 :)
 (: TODO: fix namespace issues for o:xml :)
 (: TODO: build a function to take the XLIFF and generate the translated HTML :)
+(: TODO: maybe it's handy to have the annotator also add generated ids for certain elements :)
 
 import module namespace o = 'http://xokomola.com/xquery/origami'
     at '../../origami/origami.xqm';
@@ -57,13 +58,12 @@ declare variable $ex:xliff-builder :=
             ['xlf:trans-unit',
                 function($n,$d) {
                     for $html at $id in ex:extract-translatable($d?content)
-                    let $tu := map { 
-                        'content': $html,
-                        'id': $id,
-                        'resname': o:tag($html),
-                        'srclang': $d?srclang,
-                        'tgtlang': $d?tgtlang
-                    }
+                    let $tu := map:merge((
+                        $d,
+                        map:entry('content', $html),
+                        map:entry('id', $id),
+                        map:entry('resname', o:tag($html))
+                    ))
                     let $xlf := ex:xliff-trans-unit($n,$tu)
                     return $xlf
                 }
