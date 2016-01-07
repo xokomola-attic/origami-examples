@@ -20,7 +20,7 @@ declare variable $ex:vbox :=
     <vbox width="640" height="480">
       <box height="200"/>
       <spacer/>
-      <box height="200"/>
+      <box height="100"/>
       <hbox>
         <spacer/>
         <box width="40"/>
@@ -63,10 +63,10 @@ declare function local:save($svg)
     o:xml(ex:svg($svg), ex:svg-builder())
   )
 };
-(: o:xml(ex:layout-top-down(o:doc($ex:vbox))) :)
+o:xml(ex:layout-top-down(o:doc($ex:vbox)))
 (: o:xml(ex:layout-bottom-up(o:doc($ex:vbox))) :)
 (: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:layers)))) :)
-local:save(ex:layout-top-down(o:doc($ex:layers)))
+(: local:save(ex:layout-top-down(o:doc($ex:layers))) :)
 (: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:layers))), ex:svg-builder()) :)
 (: o:xml(ex:svg(ex:layout-top-down(o:doc($ex:layers)))) :)
 (: ex:sum-values([1,2,1,1]) :)

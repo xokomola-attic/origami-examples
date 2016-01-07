@@ -1,5 +1,8 @@
 xquery version "3.1";
 
+(: TODO: handle svg:text :)
+(: TODO: compose/collage SVG :)
+
 (: http://limpet.net/mbrubeck/2014/09/08/toy-layout-engine-5-boxes.html :)
 (: https://github.com/tel/frame :)
 (: https://github.com/tel/frame/blob/master/src/frame/fstate.clj :)
@@ -23,20 +26,12 @@ as array(*)
 {
     array {
         o:tag($node),
-        map:merge((
-            map { 
-                'width': $width,
-                'height': $height
-            },
-            o:attrs($node)
-        )),
+        o:advise-attrs($node, map { 
+            'width': $width,
+            'height': $height
+        }),
         o:children($node)
     }
-};
-
-declare function ex:collect-tag($nodes)
-{
-    for-each($nodes, o:tag#1)
 };
 
 declare function ex:collect-attribute($nodes, $attribute as xs:string)
@@ -100,12 +95,13 @@ declare function ex:layout-node-children($node)
                 $attrs,
                 if ($child-count = 0) then
                     ()
-                else if (every $tag in ex:collect-tag($children) satisfies $tag = 'layer') then
+                else if (every $node in o:filter($children, o:is-element#1) 
+                            satisfies o:tag($node) = 'layer') then
                     fold-left(
                         $children,
                         (),
                         function($result, $child) {
-                            ($result, o:set-attr($child, map {
+                            ($result, $child => o:set-attrs(map {
                                 'x': $x,
                                 'y': $y,
                                 'height': $height, 
@@ -127,7 +123,7 @@ declare function ex:layout-node-children($node)
                             function($result, $child) {
                                 let $pos := count($result) + 1
                                 return
-                                    ($result, o:set-attr($child, map {
+                                    ($result, $child => o:set-attrs(map {
                                         'x': $x($pos),
                                         'y': $y,
                                         'height': (o:attrs($child)?height,$height)[1], 
@@ -149,7 +145,7 @@ declare function ex:layout-node-children($node)
                             function($result, $child) {
                                 let $pos := count($result) + 1
                                 return
-                                    ($result, o:set-attr($child, map {
+                                    ($result, $child => o:set-attrs(map {
                                         'x': $x,
                                         'y': $y($pos),
                                         'height': $advice($pos), 
@@ -175,13 +171,13 @@ declare function ex:layout-node($node)
             )        
         else if ($tag = 'hbox') then
             ex:advise-dimensions($node,
-                sum(o:map($children, function($n) { o:attrs($n)?width })),
-                max(o:map($children, function($n) { o:attrs($n)?height }))
+                sum(o:for-each($children, function($n) { o:attrs($n)?width })),
+                max(o:for-each($children, function($n) { o:attrs($n)?height }))
             )
         else
             ex:advise-dimensions($node,
-                max(o:map($children, function($n) { o:attrs($n)?width })),
-                sum(o:map($children, function($n) { o:attrs($n)?height }))
+                max(o:for-each($children, function($n) { o:attrs($n)?width })),
+                sum(o:for-each($children, function($n) { o:attrs($n)?height }))
             )
 };
 declare function ex:layout-top-down($mu)
@@ -206,37 +202,33 @@ declare function ex:render-svg-node($node)
         else if ($tag != 'layer') then
             (
                 array { 'rect',
-                    map:remove(map:merge((
-                        map { 
-                            'fill': ex:random-color(),
+                    $node =>
+                    o:advise-attrs(map { 
+                            'fill': ex:rgb(),
                             'fill-opacity': 0.6,
                             'stroke-width': 1,
                             'stroke': 'black',
                             'stroke-opacity': 1
-                        },
-                        $attrs
-                    )), 'layers')
+                    }) =>
+                    o:remove-attr('layers') =>
+                    o:attrs()
                 },
                 $children
             )
         else
             array { 'g',
-                o:select-keys($attrs,'id'),
+                $attrs?id,
                 $children
             }
     )
 };
 
-declare function ex:random-color()
+declare function ex:rgb()
 {
-    concat(
-        'rgb(',
-        random:integer(255), ',',
-        random:integer(255), ',',
-        random:integer(255),
-        ')'
-    )
+    'rgb(' || string-join((1 to 3) ! random:integer(255), ',') || ')'
 };
+
+(: TODO: maybe instead use o:transformer :)
 
 declare function ex:svg-builder()
 {
@@ -256,7 +248,7 @@ declare function ex:svg($mu)
                 o:postwalk($mu, ex:render-svg-node#1),
                 function($node) {
                     if (o:tag($node) = 'g') then
-                        index-of($layers, o:attrs($node)?id)[1]
+                        index-of($layers, (o:attrs($node)?id,-10)[1])
                     else
                         -10
                 }
@@ -264,11 +256,15 @@ declare function ex:svg($mu)
         ]    
 };
 
+(:~
+ : Generate an $i x $j grid with random colors.
+ :)
 declare function ex:mosaic($i,$j)
 {
     let $cell-width := 100
     return
-        ['vbox', map { 'width': $i * $cell-width, 'height': $j * $cell-width },
+        ['vbox', 
+            map { 'width': $i * $cell-width, 'height': $j * $cell-width },
             for $row in 1 to $i
             return
                 ['hbox',
