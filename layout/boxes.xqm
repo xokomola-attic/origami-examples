@@ -14,6 +14,10 @@ module namespace ex = 'http://xokomola.com/xquery/origami/examples';
 import module namespace o = 'http://xokomola.com/xquery/origami'
     at '../../origami/origami.xqm';
 
+(:~
+ : A simple function that can be used with a walker to report the tag of 
+ : each element.
+ :)
 declare function ex:report($node)
 {
     let $report := trace(o:tag($node), 'TAG: ')
@@ -21,6 +25,10 @@ declare function ex:report($node)
         $node
 };
 
+(:~
+ : Copy an element node setting width and height attributes only
+ : if not set.
+ :)
 declare function ex:advise-dimensions($node, $width, $height)
 as array(*)
 {
@@ -34,6 +42,11 @@ as array(*)
     }
 };
 
+(:~
+ : Iterate over a sequence of elements and returning a specific attribute
+ : for each element.
+ :)
+(: TODO: why an array? :)
 declare function ex:collect-attribute($nodes, $attribute as xs:string)
 as array(*)
 {
@@ -46,12 +59,18 @@ as array(*)
     )
 };
 
+(: TODO: if an array why not just use array:size? :)
 declare function ex:count-values($values as array(*))
 as xs:integer
 {
     count($values?*)
 };
 
+(:~
+ : Map over an array of integers adding up all previous values returning
+ : a new array with all values.
+ :)
+(: TODO: why an array? :)
 declare function ex:sum-values($values as array(*))
 {
     let $values := $values?*
@@ -65,6 +84,7 @@ declare function ex:sum-values($values as array(*))
         }
 };
 
+(: TODO: not very clear :)
 declare function ex:advise-values($a,$b)
 {
     let $b :=
@@ -76,6 +96,7 @@ declare function ex:advise-values($a,$b)
         array:for-each-pair($a,$b, function($a,$b) { ($a,$b)[1] })
 };
 
+(: TODO: how to get rid of code duplication for vbox/hbox :)
 declare function ex:layout-node-children($node)
 {
     let $tag := o:tag($node)
