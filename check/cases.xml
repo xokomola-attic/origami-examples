@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test>
+    <case id="e1">
+        <x/>
+    </case>
+    <case id="e2">
+        <x y="10"/>
+    </case>
+    <!-- currently fails due to the way whitespace is preserved -->
+    <case id="e3">
+        <a>
+            <b/>
+            <c/>
+        </a>
+    </case>
+</test>
