@@ -11,6 +11,7 @@ import module namespace o = 'http://xokomola.com/xquery/origami'
 (: TODO: a HTML report (with live-page extension in Chrome 
    we can have a poor man's dash) :)
 (: TODO: unit module also returns type info of expected and result :)
+(: TODO: embed documentation so we can use this to generate on-line docs :)
 
 (: An example test suite for generating test cases based on an existing Origami test suite :)
 
