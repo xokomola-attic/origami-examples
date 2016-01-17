@@ -1,11 +1,20 @@
-import module namespace ex = 'http://xokomola.com/xquery/origami/examples'
-    at 'check-test.xqm'; 
+module namespace test = 'http://xokomola.com/xquery/origami/tests';
+
+import module namespace qt = 'http://xokomola.com/xquery/check'
+    at 'check.xqm'; 
 
 import module namespace o = 'http://xokomola.com/xquery/origami'
     at '../../origami/origami.xqm';
 
-(: $ex:xml-cases :)
+declare %unit:test function test:check() 
+{
+    qt:check()
+};
 
-o:xml(ex:check())
-
-(: o:xml(ex:equals(4,3)) :)
+declare %unit:test function test:xml() 
+{
+    for $case in $ex:xml-cases
+    let $xml := $case/*
+    return
+        unit:assert-equals(o:xml(o:doc($xml)), $xml)
+};

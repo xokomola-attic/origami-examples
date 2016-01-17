@@ -1,9 +1,301 @@
 xquery version "3.1";
 
-module namespace qt = 'http://xokomola.com/xquery/origami/examples';
+module namespace qt = 'http://xokomola.com/xquery/check';
 
 import module namespace o = 'http://xokomola.com/xquery/origami'
     at '../../origami/origami.xqm';
+
+(: ==================== Unit tests ==================== :)
+
+declare %private variable $qt:default-options :=
+    map {
+        'annotation': 'unit:test',
+        'exclude-annotation': 'unit:ignore',
+        'doc': true()
+    };
+    
+(:~
+ : Run a test suite just like the built-in Unit test command.
+ : Takes a sequence of path strings, file names are modules which get
+ : parsed for unit tests. Directories will be scanned for modules.
+ :
+ :)
+declare function qt:unit-test($paths as item()*)
+{
+    qt:unit-test($paths, map {})
+};
+
+declare function qt:unit-test($paths as item()*, $options as map(*))
+{
+    qt:run-tests(qt:load-suite($paths, $options))
+};
+
+(:~
+ : Run the one test (specified as a map)
+ :)
+declare function qt:eval-test($test as array(*))
+as item()*
+{
+    xquery:eval(qt:build-test-query($test))
+};
+
+declare function qt:run-tests($suite as array(*))
+{
+    
+};
+
+(:~
+ : The function that is called when running the test. It will
+ : try the function with the arguments (using fn:apply) and build 
+ : a result data structure.
+ :)
+declare function qt:run-test($fn, $args)
+{
+    let $fail := 
+        try {
+            apply($fn,$args)
+        } catch * {
+            ['fail',
+                map {
+                    'code': $err:code,
+                    'module': $err:module,
+                    'line': $err:line-number, 
+                    'column': $err:column-number,
+                    'fn': function-name($fn),
+                    'args': $args
+                },
+                ['desc', $err:description],
+                ['value', $err:value]
+            ]
+        }
+    return
+        if (exists($fail)) then
+            $fail
+        else
+            ['pass', map { 'fn': $fn, 'args': $args }]
+};
+
+(:~
+ : Use the selectors which can be a string (path) or a selector
+ : map that includes, excludes certain files.
+ : By default it will just list all files in a specified path.
+ :
+ : map {
+ :   'dir': 'foo/bar',
+ :   'include': '*.xq?',
+ :   'recurse': false()
+ : }
+ :)
+(: TODO: maybe return the module/resource map :)
+(: TODO: I would like to maintain the root directory :)
+declare function qt:find-modules($paths as item()*)
+{
+    for $path in $paths
+    return
+        qt:resolve-module-selector(qt:module-selector($path))
+};
+
+declare function qt:module-selector($path as item())
+{
+    let $module-selector-defaults :=
+        map {
+            'include': '*.xq?',
+            'recurse': false()
+        }
+    return
+        typeswitch ($path)
+        case map(*) return
+            map:merge((
+                $module-selector-defaults,
+                $path
+            ))
+        case xs:string return
+            map:merge((
+                $module-selector-defaults,
+                map:entry('dir', $path)
+            ))
+        default return
+            ()
+};
+
+declare function qt:resolve-module-selector($selector as map(*))
+{
+    if (file:exists($selector?dir)) then
+        filter(
+            file:list(
+                $selector?dir, 
+                ($selector?recurse,false())[1],
+                ($selector?include,'*.*')[1]
+            ) ! file:resolve-path(concat($selector?dir,'/',.)),
+            file:is-file#1
+        )   
+    else
+        ()
+};
+
+(:~
+ : Load test modules and return a data structure with test functions embedded.
+ :)
+declare function qt:load-suite($paths as item()*)
+{
+    qt:load-suite($paths, map {})
+};
+
+declare function qt:load-suite($paths as item()*, $options as map(*))
+{
+    ['suite',
+        qt:find-modules($paths) ! qt:load-module(., $options)
+    ]
+};
+
+(:~
+ : Load a test module and return a data structure with test functions embeded.
+ :)
+(: inspect will take the last xqdoc comment from the function, not the one
+ : preceding it!
+ :)
+(: TODO: maybe matching/filtering of tests? Can use standard techniques for this :)
+(: TODO: provide a map of module loading options (e.g. to use comments or not?) :)
+(: TODO: other annotations :)
+declare function qt:load-module($module as xs:string)
+{
+    qt:load-module($module, map {})
+};
+
+declare function qt:load-module($module as xs:string, $options as map(*))
+{
+    let $options := map:merge(($qt:default-options, $options))
+    return
+        ['module',
+            map { 
+                'uri': $module, 
+                'name': tokenize($module, '/')[last()],
+                'last-modified': file:last-modified($module),
+                '@': function($n) {
+                    array {
+                        o:tag($n),
+                        o:attrs($n),
+                        o:children($n) ! o:apply(., o:attrs($n))
+                    }
+                }
+            },
+            let $fns :=
+                try {
+                    inspect:module($module)/function
+                } catch * {
+                    ()
+                }
+            return
+                qt:load-tests($fns, $options)
+        ]
+};
+
+(:~
+ : Filter sequence of function elements with test options.
+ :
+ : map {
+ :   'annotation': 'unit:test',
+ :   'exclude-annotation': 'unit:ignore'
+ : }
+ :)
+(: TODO: only last xqdoc comment is put in description :)
+(: TODO: handle expect :)
+declare function qt:load-tests($fns as element(function)*, $options)
+{
+    for $fn in $fns
+    let $test :=  
+        map {
+            'name': string($fn/@name),
+            'uri': string($fn/@uri)
+        }
+    let $description :=
+        if ($options?doc and $fn/description) then
+            ['description', string($fn/description)]
+        else    
+            ()
+    return
+        if (some $name in $fn/annotation/@name satisfies $name = $options?exclude-annotation) then
+            ['test',
+                map:merge(($test, map:entry('active', false()))),
+                $description
+            ]
+        else if (some $name in $fn/annotation/@name satisfies $name = $options?annotation) then
+            ['test',
+                map:merge(($test, 
+                    map:entry('active', true()),
+                    map:entry('@', function($test, $module) {
+                        xquery:eval(qt:build-test-query(
+                            map:merge(($test, map:entry('module', $module?uri)))
+                        ))
+                    })
+                )),
+                $description
+            ]
+        else
+            ()
+};
+
+(:~
+ : Build a query string that can be used with `xquery:eval`.
+ : The query calls one unit test function. It will also use some
+ : test utility functions that are used in this test harness.
+ :
+ : This is the normal XML representation from inspection:
+ :
+ : <function name="test:xml" uri="http://xokomola.com/xquery/origami/tests">
+ :   <annotation name="unit:test" uri="http://basex.org/modules/unit"/>
+ :   <description>Sequence as content.</description>
+ :   <return type="item()" occurrence="*"/>
+ : </function>
+ :
+ : It is, instead, represented using a map.
+ :
+ : map {
+ :   'name': 'test:xml',
+ :   'uri': '...',
+ :   'module': '.../path/to/module/test.xqm'
+ : }
+ :)
+(: Maybe it's better to eval only once and many tests with one eval. :)
+(: For test functions with arguments we can add this info to the map as well :)
+(: Expect should also be handled :)
+declare function qt:build-test-query($test as array(*))
+as xs:string?
+{
+    let $attrs := o:attrs($test)
+    where $attrs?active
+    return
+        let $import-check :=
+            concat(
+                'import module namespace qt = "',
+                $qt:uri, '" at "', file:base-dir(), 'check.xqm', '";'
+            )
+        let $import-module :=
+            if ($attrs?uri != $qt:uri) then
+                concat(
+                    'import module namespace test = "', $attrs?uri, 
+                    '" at "', $attrs?module, '"; '
+                )
+            else
+                ()
+        return
+            concat(
+                $import-check,
+                $import-module,
+                'qt:run-test(', $attrs?name, '#0,[])')
+};
+
+declare %unit:test function qt:example-failing-unit-test()
+{
+    unit:assert-equals(3,4)
+};
+
+declare %unit:test function qt:example-passing-unit-test()
+{
+    unit:assert-equals(4,4)
+};
+
+(: ==================== Property-based tests ==================== :)
 
 (:~
  : Basic concept: compose generator functions that produce argument lists for
@@ -13,6 +305,8 @@ import module namespace o = 'http://xokomola.com/xquery/origami'
  : Reproducability is achieved by using and recording a seed so if we know the
  : seed we can re-run the tests.
  :)
+
+declare variable $qt:uri := 'http://xokomola.com/xquery/check';
 
 (: TODO: check if this is really the maximum/minimum for xs:integer? It should be unbounded :)
 declare variable $qt:min-integer := -854775808;
@@ -168,3 +462,82 @@ declare function qt:array($gen as function(*))
             }
         }
 };
+
+(: TODO: rerun failed tests :)
+(: TODO: maybe collect timing as well :)
+(: TODO: a HTML report (with live-page extension in Chrome 
+   we can have a poor man's dash) :)
+(: TODO: unit module also returns type info of expected and result :)
+(: TODO: embed documentation so we can use this to generate on-line docs :)
+
+(: An example test suite for generating test cases based on an existing Origami test suite :)
+
+(: use an external XML file for test cases, then test round tripping :)
+declare variable $qt:xml-cases as element(case)* := 
+    doc(file:base-dir() || 'cases.xml')/*/case;
+
+(: a) Import this suite and interactively run tests :)
+
+(: TODO: we can embed stuff from the test case XML :)
+
+declare function qt:check()
+{
+    ['check',
+        for $case in $qt:xml-cases
+        let $xml := $case/*
+        let $fail := qt:equals(o:xml(o:doc($xml)), $xml)
+        let $case-attrs := map { 'id': string($case/@id) }
+        return
+            if (exists($fail)) then
+                $fail => 
+                o:set-attrs($case-attrs)
+            else
+                ['pass', $case-attrs]
+    ] => qt:report()
+};
+
+(: TODO: other reporters could group by module :)
+declare function qt:report($results)
+{
+    let $tests := count(o:children($results))
+    let $failed := count(o:filter(o:children($results), function($n) { o:tag($n) = 'fail' }))
+    let $passed :=  $tests - $failed
+    let $pass-rate := round(($passed div $tests) * 100) div 100
+    return
+        o:set-attrs(
+            $results,
+            map { 
+                'tests': $tests,
+                'pass-rate': $pass-rate,
+                'passed': $passed,
+                'failed': $failed 
+            }
+        )
+};
+
+declare function qt:equals($result,$expect)
+{
+    try {
+        unit:assert-equals($result, $expect)
+    } catch * {
+        (: TODO: categorize fails/errors with $err:code :)
+        ['fail',
+            map {
+                'code': $err:code,
+                'module': $err:module,
+                'line': $err:line-number, 
+                'column': $err:column-number
+            },
+            ['desc', $err:description],
+            ['result', $result],
+            ['expect', $expect],
+            ['value', $err:value]
+        ]
+    }
+};
+
+(: b) Use a test runner (which may use xquery eval to set up a test environment :)
+
+(: c) Use it with the unit module by wrapping test runs in annotated unit test functions :)
+
+(: TODO: when it is run like this the tests are executed but failures are not reported :)
