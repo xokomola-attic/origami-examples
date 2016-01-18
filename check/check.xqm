@@ -41,7 +41,7 @@ as item()*
 
 declare function qt:run-tests($suite as array(*))
 {
-    
+    o:xml(o:apply($suite))   
 };
 
 (:~
@@ -49,30 +49,43 @@ declare function qt:run-tests($suite as array(*))
  : try the function with the arguments (using fn:apply) and build 
  : a result data structure.
  :)
+(: TODO: pushing $err:value into Mu data may cause problems serializing as it might be a function item (for now simply serialize the value) :)
 declare function qt:run-test($fn, $args)
 {
+    let $test-attrs :=
+        map:merge((
+            map:entry('fn', function-name($fn)),
+            if (exists($args)) then map:entry('args', $args) else ()
+        ))
     let $fail := 
         try {
             apply($fn,$args)
         } catch * {
             ['fail',
-                map {
-                    'code': $err:code,
-                    'module': $err:module,
-                    'line': $err:line-number, 
-                    'column': $err:column-number,
-                    'fn': function-name($fn),
-                    'args': $args
-                },
+                map:merge((
+                    $test-attrs,
+                    map {
+                        'code': $err:code,
+                        'module': $err:module,
+                        'line': $err:line-number, 
+                        'column': $err:column-number
+                    }
+                )),
                 ['desc', $err:description],
-                ['value', $err:value]
+                ['value', 
+                    try {
+                        serialize($err:value)
+                    } catch * {
+                        'NOT-SERIALIZABLE'
+                    }
+                ]
             ]
         }
     return
         if (exists($fail)) then
             $fail
         else
-            ['pass', map { 'fn': $fn, 'args': $args }]
+            ['pass', $test-attrs]
 };
 
 (:~
@@ -225,7 +238,8 @@ declare function qt:load-tests($fns as element(function)*, $options)
                     map:entry('active', true()),
                     map:entry('@', function($test, $module) {
                         xquery:eval(qt:build-test-query(
-                            map:merge(($test, map:entry('module', $module?uri)))
+                            $test => 
+                            o:set-attr('module', $module?uri)
                         ))
                     })
                 )),

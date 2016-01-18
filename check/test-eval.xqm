@@ -104,7 +104,7 @@ declare %unit:test function test:anon-function-using-named-function()
 
 (: FAILS with [bxerr:BXXQ0001] No updating expression allowed. :)
 
-declare %unit:test %unit:ignore function test:function-with-closure()
+declare %unit:test function test:function-with-closure()
 {
     unit:assert-equals(
         xquery:eval(
