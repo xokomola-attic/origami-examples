@@ -1,4 +1,4 @@
-xquery version "3.1";
+xquery version '3.1';
 
 module namespace qt = 'http://xokomola.com/xquery/check';
 
@@ -7,11 +7,14 @@ import module namespace o = 'http://xokomola.com/xquery/origami'
 
 (: ==================== Unit tests ==================== :)
 
+declare %private variable $qt:eval-options := ('timeout', 'permission', 'memory');
+
 declare %private variable $qt:default-options :=
     map {
         'annotation': 'unit:test',
         'exclude-annotation': 'unit:ignore',
-        'doc': true()
+        'doc': true(),
+        'timeout': 30
     };
     
 (:~
@@ -36,12 +39,27 @@ declare function qt:unit-test($paths as item()*, $options as map(*))
 declare function qt:eval-test($test as array(*))
 as item()*
 {
-    xquery:eval(qt:build-test-query($test))
+    xquery:eval(
+        qt:build-test-query($test), 
+        o:select-keys($qt:default-options, $qt:eval-options)
+    )
 };
 
 declare function qt:run-tests($suite as array(*))
 {
-    o:xml(o:apply($suite))   
+    o:xml(
+        let $results := o:apply($suite)
+        return
+            $results => 
+                o:set-attrs(
+                    map {
+                        'passed': sum(fold-left(o:children($results), (), function($acc, $module) { ($acc, o:attrs($module)?passed) })),
+                        'failed': sum(fold-left(o:children($results), (), function($acc, $module) { ($acc, o:attrs($module)?failed) })),
+                        'errors': sum(fold-left(o:children($results), (), function($acc, $module) { ($acc, o:attrs($module)?errors) })),
+                        'skipped': sum(fold-left(o:children($results), (), function($acc, $module) { ($acc, o:attrs($module)?skipped) }))
+                    }
+                )
+    )   
 };
 
 (:~
@@ -50,27 +68,32 @@ declare function qt:run-tests($suite as array(*))
  : a result data structure.
  :)
 (: TODO: pushing $err:value into Mu data may cause problems serializing as it might be a function item (for now simply serialize the value) :)
-declare function qt:run-test($fn, $args)
+declare function qt:run-test($fn, $args as array(*))
 {
     let $test-attrs :=
         map:merge((
-            map:entry('fn', function-name($fn)),
-            if (exists($args)) then map:entry('args', $args) else ()
+            map:entry('name', function-name($fn)),
+            if (array:size($args) gt 0) then map:entry('args', $args) else ()
         ))
+    let $start-ns := prof:current-ns()
     let $fail := 
         try {
             apply($fn,$args)
         } catch * {
             ['fail',
-                map:merge((
-                    $test-attrs,
-                    map {
-                        'code': $err:code,
-                        'module': $err:module,
-                        'line': $err:line-number, 
-                        'column': $err:column-number
-                    }
-                )),
+                let $duration := qt:time($start-ns)
+                return
+                    map:merge((
+                        $test-attrs,
+                        map {
+                            'error': $err:code,
+                            'module': $err:module,
+                            'line': $err:line-number, 
+                            'column': $err:column-number,
+                            'time': $duration
+                            
+                        }
+                    )),
                 ['desc', $err:description],
                 ['value', 
                     try {
@@ -82,10 +105,17 @@ declare function qt:run-test($fn, $args)
             ]
         }
     return
-        if (exists($fail)) then
+        if ($fail instance of array(*) and o:tag($fail) = 'fail') then
             $fail
         else
-            ['pass', $test-attrs]
+            ['pass', 
+                map:merge(($test-attrs, map:entry('time', qt:time($start-ns))))
+            ]
+};
+
+declare %private function qt:time($start-ns)
+{
+    concat(round((prof:current-ns() - $start-ns) div 1000) div 1000, 'ms')
 };
 
 (:~
@@ -131,6 +161,7 @@ declare function qt:module-selector($path as item())
             ()
 };
 
+(: TODO: support multiple includes/excludes :)
 declare function qt:resolve-module-selector($selector as map(*))
 {
     if (file:exists($selector?dir)) then
@@ -157,7 +188,11 @@ declare function qt:load-suite($paths as item()*)
 declare function qt:load-suite($paths as item()*, $options as map(*))
 {
     ['suite',
-        qt:find-modules($paths) ! qt:load-module(., $options)
+        map:merge((
+            $qt:default-options, 
+            $options
+        )),
+        qt:find-modules($paths) ! qt:load-module(., $options)    
     ]
 };
 
@@ -177,19 +212,32 @@ declare function qt:load-module($module as xs:string)
 
 declare function qt:load-module($module as xs:string, $options as map(*))
 {
+    (: TODO: derive module path from suite path :)
     let $options := map:merge(($qt:default-options, $options))
     return
         ['module',
             map { 
-                'uri': $module, 
+                'uri': $module,
                 'name': tokenize($module, '/')[last()],
                 'last-modified': file:last-modified($module),
                 '@': function($n) {
-                    array {
-                        o:tag($n),
-                        o:attrs($n),
-                        o:children($n) ! o:apply(., o:attrs($n))
-                    }
+                    let $results := o:children($n) ! o:apply(., o:attrs($n))
+                    let $passed := count(o:filter($results, function($n) { o:tag($n) = 'pass' }))
+                    let $skipped := count(o:filter($results, function($n) { o:tag($n) = 'skipped' }))
+                    let $failed := count(o:filter($results, function($n) { o:tag($n) = 'fail' }))
+                    let $errors := count(o:filter($results, function($n) { o:tag($n) = 'error' }))
+                    return
+                        array {
+                            o:tag($n),
+                            map:merge((
+                                o:attrs($n),
+                                map:entry('passed', $passed),
+                                map:entry('skipped', $skipped),
+                                map:entry('failed', $failed),
+                                map:entry('errors', $errors)
+                            )),
+                            $results
+                        }
                 }
             },
             let $fns :=
@@ -229,7 +277,19 @@ declare function qt:load-tests($fns as element(function)*, $options)
     return
         if (some $name in $fn/annotation/@name satisfies $name = $options?exclude-annotation) then
             ['test',
-                map:merge(($test, map:entry('active', false()))),
+                map:merge(($test, 
+                    map:entry('active', false()),
+                    map:entry('@', function($test, $module) {
+                        let $attrs := o:attrs($test)
+                        return
+                            ['skipped',
+                                map {
+                                    'name': $attrs?name,
+                                    'uri': $attrs?uri
+                                }
+                            ]
+                    })
+                )),
                 $description
             ]
         else if (some $name in $fn/annotation/@name satisfies $name = $options?annotation) then
@@ -240,7 +300,8 @@ declare function qt:load-tests($fns as element(function)*, $options)
                         xquery:eval(qt:build-test-query(
                             $test => 
                             o:set-attr('module', $module?uri)
-                        ))
+                        ),
+                        o:select-keys($qt:default-options, $qt:eval-options))
                     })
                 )),
                 $description

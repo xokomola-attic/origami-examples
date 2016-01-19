@@ -11,10 +11,10 @@ declare variable $local:dir := file:base-dir() || '../../origami/test';
 (: inspect:xqdoc($local:dir || '/test-xml.xqm') :)
 (: qt:module-selector(file:base-dir() || '../../origami/test') :)
 
-  qt:run-tests(qt:load-suite(
+  o:xml(qt:load-suite(
     map { 
       'dir': $local:dir,
-      'include': '*.xqm' 
+      'include': 'test-*.xqm' 
     }
   ))
   
