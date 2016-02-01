@@ -1,0 +1,573 @@
+<suite>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="1342" column="26" args="">
+      <desc>Function must not be updating: %updating function($att-name_843....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="1342" column="26" args="">
+      <desc>Function must not be updating: %updating function($att-name_829....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="1342" column="26" args="">
+      <desc>Function must not be updating: %updating function($att-name_843....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="1342" column="26" args="">
+      <desc>Function must not be updating: %updating function($att-name_829....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="1342" column="26" args="">
+      <desc>Function must not be updating: %updating function($att-name_843....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="1342" column="26" args="">
+      <desc>Function must not be updating: %updating function($att-name_739....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="1342" column="26" args="">
+      <desc>Function must not be updating: %updating function($att-name_753....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="1342" column="26" args="">
+      <desc>Function must not be updating: %updating function($att-name_739....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="1342" column="26" args="">
+      <desc>Function must not be updating: %updating function($att-name_753....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="o:unwellformed" line="300" column="23" args="">
+      <desc>Standalone attribute nodes are not supported</desc>
+      <value x="10"/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="o:unwellformed" line="363" column="35" args="">
+      <desc>Element tag must be a string</desc>
+      <value>10</value>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="o:unwellformed" line="343" column="55" args="">
+      <desc>Attribute name must be a string</desc>
+      <value>1</value>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="o:unwellformed" line="365" column="23" args="">
+      <desc>Map found in non-attribute position</desc>
+      <value a="10" b="20"/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="378" column="22" args="">
+      <desc>Function must not be updating: %updating function($name_873, $v....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="378" column="22" args="">
+      <desc>Function must not be updating: %updating function($name_855, $v....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="378" column="22" args="">
+      <desc>Function must not be updating: %updating function($name_855, $v....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>1</test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:FOCA0002" line="2299" column="23" args="">
+      <desc>Cannot cast to xs:QName: "1y".</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2281" column="18" args="">
+      <desc>Cannot promote xs:string to xs:QName: "X".</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="o:invalid-argument" line="2303" column="15" args="">
+      <desc>Invalid QName resolver</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="o:invalid-argument" line="2389" column="23" args="">
+      <desc>Invalid namespace map argument</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:FOUT1190" line="151" column="37" args="">
+      <desc>Invalid input, or wrong encoding specified.</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/test/test-reading-and-parsing.xqm" code="unit:UNIT0001" line="181" column="24" args="">
+      <desc>Item 1: document() expected, document-node {"test001.xml"} returned.</desc>
+      <value>Read test001.xml</value>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/test/test-reading-and-parsing.xqm" code="unit:UNIT0001" line="190" column="24" args="">
+      <desc>Item 1: document() expected, document-node {"test001.xml"} returned.</desc>
+      <value>Read test001.xml</value>
+    </fail>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:FOUT1200" line="157" column="32" args="">
+      <desc>Resource contains invalid input: Invalid input, or wrong encoding specified.</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="205" column="18" args="">
+      <desc>Cannot cast empty-sequence() to xs:string.</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:FOJS0001" line="184" column="16" args="">
+      <desc>JSON parser (1:7): Expected ']', found '&#x;'.</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="err:XPTY0004" line="2358" column="15" args="">
+      <desc>Function must not be updating: %updating function($ns-map_568, ....</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/test/test-xml.xqm" code="unit:UNIT0001" line="90" column="24" args="">
+      <desc>Item 1: &lt;ax=""b=""/&gt; expected, &lt;a xmlns=""b=""x=""/&gt; returned.</desc>
+      <value/>
+    </fail>
+  </test>
+  <test>
+    <fail fn="" module="/Users/marcvangrootel/data/origami-webapp/webapp/origami/origami.xqm" code="o:unwellformed" line="696" column="18" args="">
+      <desc>Tag must be a string</desc>
+      <value x="1"/>
+    </fail>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+  <test>
+    <pass fn="" args=""/>
+  </test>
+</suite>
